@@ -30,13 +30,6 @@
 - MP4·WebM 기반 MediaSource와 실제 미디어 Blob을 지원합니다. DRM, WebRTC, Worker 내부 전용 MediaSource, 직접 URL 재생은 지원하지 않습니다.
 - 수집을 위해 페이지의 미디어 함수를 감쌉니다. 페이지가 이를 검사할 가능성이 있으므로 감지 불가능을 보장하지 않습니다.
 
-## 권한
-
-`tabs`는 현재 탭 식별과 제목 표시에, `storage`는 로컬 상태·로그 보관에, `downloads`는 완성된 로컬 파일 저장에 사용합니다. 
-`offscreen`은 디스크 기록과 병합을 담당하며 영상 재생을 수행하지 않습니다. 
-`unlimitedStorage`는 장시간 녹화를 위한 확장 저장 공간에 사용됩니다. 
-페이지 수집 스크립트는 HTTP·HTTPS 페이지의 프레임에서 실행됩니다.
-
 ## 포함된 라이브러리
 
 Mediabunny 1.61.3을 사용합니다. 라이선스와 출처는 [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md) 및 [vendor/LICENSE](vendor/LICENSE)에 포함합니다.
