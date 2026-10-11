@@ -1,0 +1,2 @@
+async function refresh(){try{const stored=await chrome.storage.local.get(['diagnostics','popupDiagnostics']);const entries=[...stored.diagnostics||[],...stored.popupDiagnostics||[]].sort((a,b)=>a.at.localeCompare(b.at)).slice(-100);document.getElementById('logs').textContent=JSON.stringify({version:chrome.runtime.getManifest().version,events:entries},null,2);}catch(error){document.getElementById('logs').textContent='로그 읽기 실패: '+error.message;}}
+document.getElementById('refresh').onclick=refresh;refresh();setInterval(refresh,2000);

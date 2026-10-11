@@ -1,0 +1,16 @@
+.env
+.env.*
+!.env.example
+*.log
+*.mp4
+*.mkv
+*.webm
+*.media
+*.tmp
+*.zip
+diagnostics*.json
+state.json
+node_modules/
+work/
+.DS_Store
+Thumbs.db

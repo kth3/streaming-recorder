@@ -1,0 +1,16 @@
+{
+  "manifest_version":3,
+  "name":"Streaming Recorder",
+  "version":"1.0.4",
+  "minimum_chrome_version":"119",
+  "description":"브라우저가 받은 스트리밍 영상과 음성을 원본 압축 상태로 저장하는 Chrome 확장",
+  "permissions":["tabs","storage","downloads","offscreen","unlimitedStorage"],
+  "action":{"default_title":"Streaming Recorder · 현재 탭 녹화","default_popup":"recorder.html","default_icon":"icons/idle.png"},
+  "icons":{"128":"icons/idle.png"},
+  "background":{"service_worker":"background.js"},
+  "content_security_policy":{"extension_pages":"script-src 'self'; object-src 'none'; connect-src 'none'"},
+  "content_scripts":[
+    {"matches":["https://*/*","http://*/*"],"js":["capture.js"],"run_at":"document_start","world":"MAIN","all_frames":true,"match_origin_as_fallback":true},
+    {"matches":["https://*/*","http://*/*"],"js":["bridge.js"],"run_at":"document_start","all_frames":true,"match_origin_as_fallback":true}
+  ]
+}

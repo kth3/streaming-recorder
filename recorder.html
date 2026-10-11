@@ -1,0 +1,10 @@
+<!doctype html><html lang="ko"><meta charset="utf-8"><title>Streaming Recorder</title>
+<link rel="stylesheet" href="recorder.css">
+<main><header><h1>Streaming Recorder</h1><span id="badge">대기</span></header>
+<section><p id="tab-title">현재 탭</p>
+<div class="actions"><button id="start" class="primary">● 녹화 시작</button><button id="stop" class="stop" disabled>■ 녹화 중지</button></div>
+<p id="status" role="status">확인 중</p></section>
+<section><h2>저장 위치</h2><p id="folder">기본 다운로드 폴더</p><div class="actions"><button id="choose">폴더 지정</button><button id="default">기본 폴더 사용</button></div></section>
+<section><h2>디버깅 로그</h2><input id="log-address" aria-label="로그 주소" readonly><div class="actions"><button id="logs">로그 보기</button><button id="clear-logs">로그 비우기</button></div><p id="log-status" role="status"></p></section>
+</main>
+<script type="module" src="recorder.js"></script></html>
