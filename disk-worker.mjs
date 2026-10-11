@@ -1,4 +1,5 @@
 import {remux} from './mux.mjs';
+import {recordingName} from './filename.mjs';
 let root,folder,record,handles=new Map();
 async function journal() {
   const file=await folder.getFileHandle('state.json',{create:true}),h=await file.createSyncAccessHandle();
@@ -8,7 +9,7 @@ async function closeHandles(){for(const h of handles.values()){h.flush();h.close
 async function operate(m) {
   root??=await navigator.storage.getDirectory();
   if(m.kind==='start') {
-    folder=await root.getDirectoryHandle(m.session.id,{create:true});record={id:m.session.id,status:'recording',createdAt:m.session.createdAt||new Date().toISOString(),bytes:0,tracks:{},outputs:[]};await journal();return record;
+    folder=await root.getDirectoryHandle(m.session.id,{create:true});record={id:m.session.id,title:m.session.title||'',status:'recording',createdAt:m.session.createdAt||new Date().toISOString(),bytes:0,tracks:{},outputs:[]};await journal();return record;
   }
   if(m.kind==='chunk') {
     if(record?.id!==m.session||record.status!=='recording')throw new Error('녹화 세션이 활성 상태가 아님.');
@@ -23,7 +24,7 @@ async function operate(m) {
     await closeHandles();record.status='finalizing';await journal();
     const blobs=[],groups=[];for(const t of Object.values(record.tracks))if(t.bytes){blobs.push(await (await folder.getFileHandle(t.file)).getFile());groups.push(t.group);}
     record.outputs=await remux(blobs,async(index,format)=>{
-      const name='recording-'+record.createdAt.replace(/[:.]/g,'-')+(index?'-part-'+(index+1):'')+'.'+format;
+      const name=recordingName(record.title,record.createdAt,index,format);
       const f=await folder.getFileHandle(name,{create:true}),h=await f.createSyncAccessHandle();h.truncate(0);handles.set('output:'+name,h);
       return {name,stream:new WritableStream({write(chunk){let offset=0;while(offset<chunk.data.length){const count=h.write(chunk.data.subarray(offset),{at:chunk.position+offset});if(!count)throw new Error('디스크 쓰기 중단.');offset+=count;}h.flush();},close(){h.flush();h.close();handles.delete('output:'+name);},abort(){h.close();handles.delete('output:'+name);}})};
     },groups);

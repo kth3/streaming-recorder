@@ -69,7 +69,8 @@ chrome.runtime.onMessage.addListener((m,sender,reply)=>{
       const {sources={}}=await chrome.storage.session.get('sources'),source=sources[m.tabId+':'+m.frameId];
       if(!source?.groups.some(g=>g.id===m.group))throw new Error('재생 데이터가 없음. 영상 탭을 새로고침해 준비해줘.');
       const record={id:crypto.randomUUID(),tabId:m.tabId,frameId:m.frameId,documentId:source.documentId,group:m.group,status:'recording',createdAt:new Date().toISOString(),bytes:0};
-      await disk({kind:'start',session:record});await status(record);
+      const title=(await chrome.tabs.get(source.tabId)).title||'';
+      await disk({kind:'start',session:{...record,title}});await status(record);
       try{const response=await chrome.tabs.sendMessage(record.tabId,{target:'bridge',kind:'start',session:record,group:record.group},{frameId:record.frameId});if(response?.error)throw new Error(response.error);}
       catch(error){await disk({kind:'fail',message:error.message});await status({...record,status:'terminal_failure',error:error.message});throw error;}return record;
     }
